@@ -115,5 +115,62 @@ public class NetSdrClientTests
         Assert.That(_client.IQStarted, Is.False);
     }
 
-    //TODO: cover the rest of the NetSdrClient code here
+    [Test]
+    public async Task ConnectAsync_WhenAlreadyConnected_ShouldNotSendMessages()
+    {
+        // Arrange
+        _tcpMock.Setup(tcp => tcp.Connected).Returns(true);
+
+        // Act
+        await _client.ConnectAsync();
+
+        // Assert
+        _tcpMock.Verify(tcp => tcp.Connect(), Times.Never);
+        _tcpMock.Verify(tcp => tcp.SendMessageAsync(It.IsAny<byte[]>()), Times.Never);
+    }
+
+    [Test]
+    public async Task ChangeFrequencyAsync_WhenNoConnection_ShouldNotSendMessage()
+    {
+        // Arrange
+        _tcpMock.Setup(tcp => tcp.Connected).Returns(false);
+
+        // Act
+        await _client.ChangeFrequencyAsync(14000000, 0);
+
+        // Assert
+        _tcpMock.Verify(tcp => tcp.SendMessageAsync(It.IsAny<byte[]>()), Times.Never);
+    }
+
+    [Test]
+    public async Task ChangeFrequencyAsync_WhenConnected_ShouldSendMessage()
+    {
+        // Arrange 
+        await _client.ConnectAsync();
+
+        // Act
+        await _client.ChangeFrequencyAsync(14000000, 0);
+
+        // Assert
+        _tcpMock.Verify(tcp => tcp.SendMessageAsync(It.IsAny<byte[]>()), Times.Exactly(4));
+    }
+
+    [Test]
+    public void TcpClient_MessageReceived_Unsolicited_DoesNotThrow()
+    {
+        // Arrange
+        byte[] dummyMessage = { 0x00, 0x01, 0x02 };
+
+        // Act & Assert
+        Assert.DoesNotThrow(() =>
+        {
+            _tcpMock.Raise(tcp => tcp.MessageReceived += null, this, dummyMessage);
+        });
+    }
+
+    [Test]
+    public void NetSdrClient_InitialState_IQStartedIsFalse()
+    {
+        Assert.That(_client.IQStarted, Is.False);
+    }
 }
