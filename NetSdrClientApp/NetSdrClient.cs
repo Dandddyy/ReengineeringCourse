@@ -66,7 +66,7 @@ namespace NetSdrClientApp
                 return;
             }
 
-;           var iqDataMode = (byte)0x80;
+            var iqDataMode = (byte)0x80;
             var start = (byte)0x02;
             var fifo16bitCaptureMode = (byte)0x01;
             var n = (byte)1;
@@ -138,7 +138,7 @@ namespace NetSdrClientApp
             if (!_tcpClient.Connected)
             {
                 Console.WriteLine("No active connection.");
-                return null;
+                return Array.Empty<byte>();
             }
 
             responseTaskSource = new TaskCompletionSource<byte[]>(TaskCreationOptions.RunContinuationsAsynchronously);
