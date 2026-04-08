@@ -4,6 +4,12 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Dandddyy_ReengineeringCourse&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Dandddyy_ReengineeringCourse)
 
 
 Цей репозиторій використовується для курсу **реінжиніринг ПЗ**. 
