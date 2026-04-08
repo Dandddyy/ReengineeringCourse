@@ -1,52 +1,32 @@
+using NetArchTest.Rules;
+using NetSdrClientApp;
 using NUnit.Framework;
-using NetSdrClientApp.Networking;
-using System.Threading.Tasks;
 
 namespace NetSdrClientAppTests
 {
     [TestFixture]
-    public class UdpClientWrapperTests
+    public class ArchitectureTests
     {
         [Test]
-        public void StopListening_WhenNotStarted_ShouldNotThrow()
+        public void Messages_ShouldNotDependOn_Networking()
         {
-            var wrapper = new UdpClientWrapper(0);
-            Assert.DoesNotThrow(() => wrapper.StopListening());
+            var result = Types.InAssembly(typeof(NetSdrClient).Assembly)
+                .That().ResideInNamespace("NetSdrClientApp.Messages")
+                .ShouldNot().HaveDependencyOn("NetSdrClientApp.Networking")
+                .GetResult();
+
+            Assert.That(result.IsSuccessful, Is.True, "Architectural error: The Messages module should not know about the Networking module!");
         }
 
         [Test]
-        public void Exit_WhenNotStarted_ShouldNotThrow()
+        public void Interfaces_ShouldStartWith_I()
         {
-            var wrapper = new UdpClientWrapper(0);
-            Assert.DoesNotThrow(() => wrapper.Exit());
-        }
+            var result = Types.InAssembly(typeof(NetSdrClient).Assembly)
+                .That().AreInterfaces()
+                .Should().HaveNameStartingWith("I")
+                .GetResult();
 
-        [Test]
-        public void GetHashCode_ShouldReturnConsistentValueForSameEndpoint()
-        {
-            // Arrange
-            var wrapper1 = new UdpClientWrapper(12348);
-            var wrapper2 = new UdpClientWrapper(12348);
-
-            // Act & Assert
-            Assert.That(wrapper1.GetHashCode(), Is.EqualTo(wrapper2.GetHashCode()));
-        }
-
-        [Test]
-        public async Task StartAndStopListening_ShouldHandleCancellationGracefully()
-        {
-            // Arrange
-            var wrapper = new UdpClientWrapper(0);
-
-            // Act
-            var listenTask = wrapper.StartListeningAsync();
-            
-            await Task.Delay(50);
-            
-            wrapper.StopListening();
-
-            // Assert
-            Assert.DoesNotThrowAsync(async () => await listenTask);
+            Assert.That(result.IsSuccessful, Is.True, "All interfaces must begin with the letter 'I'.");
         }
     }
 }
