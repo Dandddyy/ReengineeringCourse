@@ -200,10 +200,9 @@ public class NetSdrClientTests
     {
         // Arrange
         byte[] dummyPacket = new byte[64];
-        for (int i = 0; i < dummyPacket.Length; i++)
-        {
-            dummyPacket[i] = (byte)i;
-        }
+        
+        dummyPacket[0] = 64; 
+        dummyPacket[1] = 0;
 
         // Act
         Assert.DoesNotThrow(() =>
@@ -212,6 +211,6 @@ public class NetSdrClientTests
         });
 
         // Assert
-        Assert.That(File.Exists("samples.bin"), Is.True);
+        Assert.That(File.Exists("samples.bin"), Is.True, "Файл samples.bin має бути створений");
     }
 }
