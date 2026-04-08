@@ -1,6 +1,8 @@
-﻿using Moq;
+using Moq;
 using NetSdrClientApp;
 using NetSdrClientApp.Networking;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace NetSdrClientAppTests;
 
@@ -35,6 +37,15 @@ public class NetSdrClientTests
 
         _client = new NetSdrClient(_tcpMock.Object, _updMock.Object);
     }
+    
+    [TearDown]
+    public void TearDown()
+    {
+        if (File.Exists("samples.bin"))
+        {
+            File.Delete("samples.bin");
+        }
+    }
 
     [Test]
     public async Task ConnectAsyncTest()
@@ -61,7 +72,7 @@ public class NetSdrClientTests
     [Test]
     public async Task DisconnectTest()
     {
-        //Arrange 
+        //Arrange
         await ConnectAsyncTest();
 
         //act
@@ -75,7 +86,6 @@ public class NetSdrClientTests
     [Test]
     public async Task StartIQNoConnectionTest()
     {
-
         //act
         await _client.StartIQAsync();
 
@@ -88,7 +98,7 @@ public class NetSdrClientTests
     [Test]
     public async Task StartIQTest()
     {
-        //Arrange 
+        //Arrange
         await ConnectAsyncTest();
 
         //act
@@ -103,7 +113,7 @@ public class NetSdrClientTests
     [Test]
     public async Task StopIQTest()
     {
-        //Arrange 
+        //Arrange
         await ConnectAsyncTest();
 
         //act
@@ -145,7 +155,7 @@ public class NetSdrClientTests
     [Test]
     public async Task ChangeFrequencyAsync_WhenConnected_ShouldSendMessage()
     {
-        // Arrange 
+        // Arrange
         await _client.ConnectAsync();
 
         // Act
@@ -172,5 +182,36 @@ public class NetSdrClientTests
     public void NetSdrClient_InitialState_IQStartedIsFalse()
     {
         Assert.That(_client.IQStarted, Is.False);
+    }
+
+    [Test]
+    public async Task StopIQNoConnectionTest()
+    {
+        // Act
+        await _client.StopIQAsync();
+
+        // Assert
+        _tcpMock.Verify(tcp => tcp.SendMessageAsync(It.IsAny<byte[]>()), Times.Never);
+        _tcpMock.VerifyGet(tcp => tcp.Connected, Times.AtLeastOnce);
+    }
+
+    [Test]
+    public void UdpClient_MessageReceived_ShouldWriteToFile()
+    {
+        // Arrange
+        byte[] dummyPacket = new byte[64];
+        for (int i = 0; i < dummyPacket.Length; i++)
+        {
+            dummyPacket[i] = (byte)i;
+        }
+
+        // Act
+        Assert.DoesNotThrow(() =>
+        {
+            _updMock.Raise(udp => udp.MessageReceived += null, this, dummyPacket);
+        });
+
+        // Assert
+        Assert.That(File.Exists("samples.bin"), Is.True);
     }
 }
