@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace EchoTcpServer
 {
@@ -32,9 +33,8 @@ namespace EchoTcpServer
         {
             try
             {
-                Random rnd = new Random();
                 byte[] samples = new byte[1024];
-                rnd.NextBytes(samples);
+                RandomNumberGenerator.Fill(samples);
                 _messageCount++;
 
                 byte[] msg = new byte[] { 0x04, 0x84 }.Concat(BitConverter.GetBytes(_messageCount)).Concat(samples).ToArray();

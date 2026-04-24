@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EchoTcpServer
 {
@@ -9,6 +10,7 @@ namespace EchoTcpServer
         void Send(byte[] dgram, int bytes, IPEndPoint endPoint);
     }
     
+    [ExcludeFromCodeCoverage]
     public class StandardUdpClient : IUdpClient
     {
         private readonly UdpClient _client = new UdpClient();

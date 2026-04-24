@@ -39,5 +39,20 @@ namespace EchoTcpServerTests
             server.Stop();
             await serverTask; 
         }
+        
+        [Test]
+        public async Task Stop_ShouldGracefullyCancelListenerLoop()
+        {
+            // Arrange
+            using var server = new EchoServer(IPAddress.Loopback, 5056);
+            var serverTask = Task.Run(() => server.StartAsync());
+            
+            await Task.Delay(50);
+
+            // Act
+            server.Stop();
+            
+            Assert.DoesNotThrowAsync(async () => await serverTask);
+        }
     }
 }
